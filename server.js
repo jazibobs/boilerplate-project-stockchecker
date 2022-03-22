@@ -4,7 +4,6 @@ const express         = require('express');
 const bodyParser      = require('body-parser');
 const cors            = require('cors');
 const helmet          = require('helmet');
-const { MongoClient } = require("mongodb");
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
