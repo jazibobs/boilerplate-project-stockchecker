@@ -45,7 +45,7 @@ module.exports = function (app) {
           });
 
         Promise.allSettled([stock0, stock1]).then(response => {
-          console.log(apiResponse);
+          res.send(apiResponse);
         });
 
 
