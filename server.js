@@ -1,13 +1,24 @@
 'use strict';
 require('dotenv').config();
+
 const express         = require('express');
 const bodyParser      = require('body-parser');
 const cors            = require('cors');
 const helmet          = require('helmet');
+const mongoose        = require('mongoose');
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
+
+mongoose.connect(process.env.DB, {
+  useNewUrlParser: true
+});
+
+const db = mongoose.connection;
+
+db.on('error', (e) => console.error(e));
+db.once('open', () => console.log('Connected to database'));
 
 const app = express();
 
@@ -29,7 +40,7 @@ app.route('/')
 fccTestingRoutes(app);
 
 //Routing for API 
-apiRoutes(app);  
+apiRoutes(app);
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
@@ -37,18 +48,6 @@ app.use(function(req, res, next) {
     .type('text')
     .send('Not Found');
 });
-
-// Connect to MongoServer
-const { MongoClient } = require("mongodb");
-const connectionString = process.env.DB;
-
-const dbClient = new MongoClient(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-let dbConnection;
-
 
 //Start our server and tests!
 const listener = app.listen(process.env.PORT || 3000, function () {
