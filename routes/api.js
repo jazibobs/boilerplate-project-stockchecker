@@ -21,8 +21,6 @@ module.exports = function (app) {
           if (error) {
             console.error(error)
           } else {
-            console.log(result);
-
             fetch(
               "https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/" +
                 result.code +
@@ -30,13 +28,16 @@ module.exports = function (app) {
             )
               .then((response) => response.json())
               .then((data) => {
-                res.send({
+                let output = {
                   stockData: {
                     stock: data.symbol,
-                    price: data.iexRealtimePrice,
-                    likes: result.likes.length
+                    price: data.latestPrice,
+                    likes: result.likes.length,
                   },
-                });
+                };
+
+                console.log(output);
+                res.send(output);
               });
           }
         })
